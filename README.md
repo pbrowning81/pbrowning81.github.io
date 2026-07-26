@@ -2,7 +2,8 @@
 
 Personal site for Peter Browning — product leader and builder.
 
-Single static page, no build step. Hand-written HTML/CSS in `index.html`.
+Static HTML/CSS with no build step. The homepage contains selected work,
+including FlowIt and Exile Forge, and links to long-form Field Notes.
 
 ## Local preview
 
@@ -20,6 +21,12 @@ Push to the default branch; Pages publishes automatically.
 
 ## Files
 
-- `index.html` — the whole site
+- `index.html` — homepage and selected work
+- `assets/site.css` — shared site and article design system
+- `assets/flowit-dashboard.png` — curated FlowIt product visual
+- `assets/product-leaders-who-build-social.png` — social sharing image for the
+  first Field Note
+- `field-notes/product-leaders-who-build/index.html` — first published Field
+  Note
 - `headshot.jpg` — profile photo
 - `CNAME` — custom domain for GitHub Pages
