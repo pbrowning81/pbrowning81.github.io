@@ -1,233 +1,173 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Peter Browning — Product Leader &amp; Builder</title>
-<style>
-  :root{
-    --navy:#1e2a38; --navy-2:#26374a; --gold:#c39a4e;
-    --ink:#22303c; --muted:#63727e; --line:#e6e9ec;
-    --bg:#ffffff; --bg-2:#f6f7f9;
-    --maxw:940px;
-  }
-  *{box-sizing:border-box;margin:0;padding:0}
-  html{scroll-behavior:smooth}
-  body{
-    font-family:"Segoe UI","Helvetica Neue",Helvetica,Arial,sans-serif;
-    color:var(--ink); background:var(--bg);
-    line-height:1.6; -webkit-font-smoothing:antialiased;
-    overflow-x:hidden;
-  }
-  a{color:inherit}
-  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 28px}
-
-  /* ---------- header ---------- */
-  header{
-    position:sticky; top:0; z-index:10;
-    background:rgba(255,255,255,0.86); backdrop-filter:saturate(180%) blur(10px);
-    border-bottom:1px solid var(--line);
-  }
-  .bar{display:flex; align-items:center; justify-content:space-between; height:62px}
-  .brand{font-weight:700; letter-spacing:.2px; color:var(--navy); font-size:16px}
-  nav a{
-    text-decoration:none; color:var(--muted); font-size:13.5px; font-weight:600;
-    letter-spacing:.4px; margin-left:26px; text-transform:uppercase;
-  }
-  nav a:hover{color:var(--navy)}
-
-  /* ---------- intro ---------- */
-  .intro{padding:74px 0 46px}
-  .intro .grid{display:flex; align-items:center; gap:44px}
-  .intro .txt{flex:1}
-  .eyebrow{color:var(--gold); font-weight:700; font-size:12.5px; letter-spacing:2.4px;
-    text-transform:uppercase; margin-bottom:14px}
-  .intro h1{font-size:33px; line-height:1.18; color:var(--navy); font-weight:700;
-    letter-spacing:-.4px; margin-bottom:16px}
-  .intro p{font-size:16.5px; color:var(--ink); max-width:52ch}
-  .intro p b{color:var(--navy)}
-  .photo{width:132px; height:132px; border-radius:50%; flex:0 0 132px;
-    object-fit:cover; border:3px solid #fff; box-shadow:0 4px 22px rgba(30,42,56,.16)}
-
-  /* ---------- section frame ---------- */
-  section.block{padding:52px 0; border-top:1px solid var(--line)}
-  .kicker{display:flex; align-items:center; gap:12px; margin-bottom:26px}
-  .kicker h2{font-size:13px; letter-spacing:2.4px; text-transform:uppercase;
-    color:var(--navy); font-weight:700}
-  .kicker .rule{height:1px; background:var(--line); flex:1}
-
-  /* ---------- work cards ---------- */
-  .cards{display:grid; grid-template-columns:1fr 1fr; gap:18px}
-  .card{border:1px solid var(--line); border-radius:10px; padding:22px 22px 20px;
-    background:var(--bg); transition:border-color .15s, transform .15s, box-shadow .15s}
-  .card:hover{border-color:#d4c19a; transform:translateY(-2px);
-    box-shadow:0 10px 30px rgba(30,42,56,.07)}
-  .card .top{border-top:3px solid var(--gold); width:34px; margin-bottom:15px}
-  .card h3{font-size:17px; color:var(--navy); font-weight:700; margin-bottom:3px}
-  .card .role{font-size:12px; color:var(--gold); font-weight:600; letter-spacing:.4px;
-    text-transform:uppercase; margin-bottom:11px}
-  .card p{font-size:14.2px; color:var(--ink); margin-bottom:14px}
-  .tech{display:flex; flex-wrap:wrap; gap:6px}
-  .tech span{font-size:11px; color:var(--muted); border:1px solid var(--line);
-    border-radius:20px; padding:3px 10px; letter-spacing:.2px}
-  .card .link{display:inline-block; margin-top:13px; font-size:12.5px; font-weight:600;
-    color:var(--navy); text-decoration:none; letter-spacing:.3px}
-  .card .link:after{content:" \2192"; color:var(--gold)}
-  .card .link.soon{color:var(--muted)}
-  .card .link.soon:after{content:" · coming soon"; color:var(--muted); font-weight:400}
-
-  /* ---------- about ---------- */
-  .about p{font-size:15.5px; max-width:64ch; color:var(--ink); margin-bottom:14px}
-  .about p b{color:var(--navy)}
-  .facts{display:flex; flex-wrap:wrap; gap:10px 26px; margin-top:8px}
-  .facts div{font-size:13.5px; color:var(--muted)}
-  .facts b{color:var(--navy); font-weight:600}
-
-  /* ---------- contact ---------- */
-  .contact{background:var(--navy); border-top:none; color:#eaf0f5}
-  .contact .kicker h2{color:#fff}
-  .contact .kicker .rule{background:rgba(255,255,255,.16)}
-  .contact .lead{font-size:19px; color:#fff; font-weight:600; margin-bottom:20px}
-  .clinks{display:flex; flex-wrap:wrap; gap:14px 30px}
-  .clinks a{color:#eaf0f5; text-decoration:none; font-size:15px; font-weight:600;
-    border-bottom:1px solid rgba(195,154,78,.5); padding-bottom:2px}
-  .clinks a:hover{color:#fff; border-color:var(--gold)}
-
-  footer{background:var(--navy); color:#8fa2b3; font-size:12.5px; padding:26px 0 34px}
-  footer .wrap{display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px}
-
-  /* ---------- mobile ---------- */
-  @media (max-width:720px){
-    .wrap{padding:0 20px}
-    .intro h1{overflow-wrap:break-word}
-    nav a{margin-left:16px; font-size:12px}
-    .intro{padding:48px 0 34px}
-    .intro .grid{flex-direction:column-reverse; align-items:flex-start; gap:22px}
-    .intro h1{font-size:27px}
-    .photo{width:96px; height:96px; flex-basis:96px}
-    .cards{grid-template-columns:1fr}
-    section.block{padding:40px 0}
-  }
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Peter Browning is a product leader and builder focused on AI readiness, regulated data, and hands-on product delivery.">
+  <meta name="theme-color" content="#1e2a38">
+  <title>Peter Browning — Product Leader &amp; Builder</title>
+  <link rel="stylesheet" href="assets/site.css">
 </head>
 <body>
 
+<a class="skip-link" href="#main">Skip to content</a>
+
 <header>
   <div class="wrap bar">
-    <div class="brand">Peter Browning</div>
-    <nav>
+    <a class="brand" href="/" aria-label="Peter Browning home">
+      <span class="brand-full">Peter Browning</span>
+      <span class="brand-short" aria-hidden="true">PB</span>
+    </a>
+    <nav aria-label="Primary navigation">
       <a href="#work">Work</a>
+      <a href="#field-notes">Field Notes</a>
       <a href="#about">About</a>
       <a href="#contact">Contact</a>
     </nav>
   </div>
 </header>
 
-<!-- intro -->
-<div class="intro">
-  <div class="wrap grid">
-    <div class="txt">
-      <div class="eyebrow">Product Leadership &amp; Building</div>
-      <h1>I'm a product leader who builds.</h1>
-      <p>Twenty-five years in financial services, turning hard, regulated-data problems into working
-      software. Most of my time now goes to what large organizations need to actually use AI: the
-      <b>semantic layer</b>, agent-ready interfaces, the operating model. I build the prototypes
-      that prove it out.</p>
-    </div>
-    <img class="photo" src="headshot.jpg" alt="Peter Browning">
-  </div>
-</div>
-
-<!-- work -->
-<section class="block" id="work">
-  <div class="wrap">
-    <div class="kicker"><h2>Selected Work</h2><div class="rule"></div></div>
-    <div class="cards">
-
-      <div class="card">
-        <div class="top"></div>
-        <h3>Exile Forge</h3>
-        <div class="role">Self-directed · consumer app</div>
-        <p>Values any dropped item in Path of Exile 2 and tells you whether to sell, craft, or vendor
-        it — live economy data, real drop odds, and a step-by-step crafting plan with bail
-        conditions. Built end to end: discovery, prototyping, and AI-assisted delivery.</p>
-        <div class="tech"><span>React</span><span>TypeScript</span><span>Node</span><span>Vite</span></div>
-        <a class="link" href="https://exile-forge.netlify.app?utm_source=petebrowning.com&amp;utm_medium=portfolio&amp;utm_campaign=exile_forge_launch">Open Exile Forge</a>
+<main id="main">
+  <div class="intro">
+    <div class="wrap grid">
+      <div class="txt">
+        <div class="eyebrow">Product Leadership &amp; Building</div>
+        <h1>I'm a product leader who builds.</h1>
+        <p>Twenty-five years in financial services, turning hard, regulated-data problems into working
+        software. Most of my time now goes to what large organizations need to actually use AI: the
+        <b>semantic layer</b>, agent-ready interfaces, the operating model. I build the prototypes
+        that prove it out.</p>
       </div>
-
-      <div class="card">
-        <div class="top"></div>
-        <h3>Semantic layer for AI readiness</h3>
-        <div class="role">JPMorgan Chase · reference data</div>
-        <p>The same golden-source field is named differently in every system, table, and feed, and
-        100+ downstream consumers layer on their own taxonomies. I built the domain's first semantic
-        layer — 500+ fields across every data surface we own, enriched with governance context —
-        because an agent can't reason over data an organization can't consistently name.</p>
-        <div class="tech"><span>Data architecture</span><span>Governance</span><span>AI readiness</span></div>
-      </div>
-
-      <div class="card">
-        <div class="top"></div>
-        <h3>Legal-entity platform prototype</h3>
-        <div class="role">JPMorgan Chase · legal entity</div>
-        <p>An end-to-end working prototype of a next-generation legal-entity system of record, scoped
-        to like-for-like replacement of a commercial platform. Built from designer Figmas and a spec
-        I derived from the incumbent, using custom AI agents constrained to an approved component
-        system — production-shaped, not a throwaway.</p>
-        <div class="tech"><span>React</span><span>TypeScript</span><span>Design system</span><span>AI agents</span></div>
-      </div>
-
-      <div class="card">
-        <div class="top"></div>
-        <h3>Agentic data quality</h3>
-        <div class="role">JPMorgan Chase · counterparty data</div>
-        <p>A working data-quality application built solo with AI-assisted development, ahead of any
-        funded program. Profiles ~13M records against authoritative vendor sources, scores and
-        confidence-routes every issue, and puts an AI agent on the ambiguous cases — with a full
-        analyst UI, dashboard, and audit trail.</p>
-        <div class="tech"><span>React</span><span>TypeScript</span><span>Node</span><span>SQLite</span></div>
-      </div>
-
+      <img class="photo" src="headshot.jpg" alt="Peter Browning" width="136" height="136" fetchpriority="high">
     </div>
   </div>
-</section>
 
-<!-- about -->
-<section class="block about" id="about">
-  <div class="wrap">
-    <div class="kicker"><h2>About</h2><div class="rule"></div></div>
-    <p>I was born and raised in Charlottesville, Virginia, and started at Capital One at eighteen. I
-    spent close to two decades there, growing from an entry-level job to Director and picking up a
-    real passion for technology and technical execution along the way. I've kept investing in it
-    since, through graduate work, certifications, and lately teaching myself to build.</p>
-    <p>I moved to Delaware about ten years ago, and today I'm a Vice President of Product Management
-    at JPMorgan Chase, in reference data. The work I care most about now is how product management
-    changes when AI is genuinely within reach: the foundations a large organization needs to use it,
-    and the operating model that lets a team build instead of just writing specs. It's the part that
-    doesn't depend on me being in the room.</p>
-    <p>Outside work, I've got four grown kids and a standing preference for being near the water. I
-    fish, I'm outdoors whenever I can be, and I follow sports closely. Most of my best thinking
-    happens away from a screen.</p>
-    <div class="facts">
-      <div><b>Capital One → JPMorgan Chase</b> · 25+ years in financial services</div>
-      <div><b>Executive Leadership</b> · UVA Darden</div>
-      <div><b>Charlottesville, VA → Delaware</b></div>
-    </div>
-  </div>
-</section>
+  <section class="block" id="work">
+    <div class="wrap">
+      <div class="kicker"><h2>Selected Work</h2><div class="rule"></div></div>
 
-<!-- contact -->
-<section class="block contact" id="contact">
-  <div class="wrap">
-    <div class="kicker"><h2>Contact</h2><div class="rule"></div></div>
-    <div class="lead">Open to conversations about product, AI readiness, and building.</div>
-    <div class="clinks">
-      <a href="mailto:pbrowning81@gmail.com">pbrowning81@gmail.com</a>
-      <a href="https://www.linkedin.com/in/peterbrowningproduct/">LinkedIn</a>
-      <a href="Peter_Browning_Resume_2026.pdf">Résumé (PDF)</a>
+      <article class="featured-product">
+        <figure class="featured-product__visual">
+          <img src="assets/flowit-dashboard.png" alt="FlowIt dashboard showing portfolio priorities, audience metrics, capacity, and product status" width="1265" height="720" loading="lazy" decoding="async">
+        </figure>
+        <div class="featured-product__content">
+          <div class="product-label">Personal build · product operations</div>
+          <h3>FlowIt</h3>
+          <p>A local-first operating workspace that connects ideas, product evidence, roadmap
+          decisions, execution, publishing approvals, and results across a growing portfolio.</p>
+          <ul class="product-points">
+            <li>One view across FlowIt, Exile Forge, and this site</li>
+            <li>Evidence-backed priorities and capacity-aware roadmaps</li>
+            <li>Human approval gates for public publishing</li>
+          </ul>
+          <a class="text-link text-link--light" href="#field-notes">See the thinking behind it</a>
+        </div>
+      </article>
+
+      <div class="cards">
+        <article class="card">
+          <div class="top"></div>
+          <h3>Exile Forge</h3>
+          <div class="role">Self-directed · consumer app</div>
+          <p>Values any dropped item in Path of Exile 2 and tells you whether to sell, craft, or vendor
+          it — live economy data, real drop odds, and a step-by-step crafting plan with bail
+          conditions. Built end to end: discovery, prototyping, and AI-assisted delivery.</p>
+          <div class="tech"><span>React</span><span>TypeScript</span><span>Node</span><span>Vite</span></div>
+          <a class="link" href="https://exile-forge.netlify.app?utm_source=petebrowning.com&amp;utm_medium=portfolio&amp;utm_campaign=exile_forge_launch">Open Exile Forge</a>
+        </article>
+
+        <article class="card">
+          <div class="top"></div>
+          <h3>Semantic layer for AI readiness</h3>
+          <div class="role">JPMorgan Chase · reference data</div>
+          <p>The same golden-source field is named differently in every system, table, and feed, and
+          100+ downstream consumers layer on their own taxonomies. I built the domain's first semantic
+          layer — 500+ fields across every data surface we own, enriched with governance context —
+          because an agent can't reason over data an organization can't consistently name.</p>
+          <div class="tech"><span>Data architecture</span><span>Governance</span><span>AI readiness</span></div>
+        </article>
+
+        <article class="card">
+          <div class="top"></div>
+          <h3>Legal-entity platform prototype</h3>
+          <div class="role">JPMorgan Chase · legal entity</div>
+          <p>An end-to-end working prototype of a next-generation legal-entity system of record, scoped
+          to like-for-like replacement of a commercial platform. Built from designer Figmas and a spec
+          I derived from the incumbent, using custom AI agents constrained to an approved component
+          system — production-shaped, not a throwaway.</p>
+          <div class="tech"><span>React</span><span>TypeScript</span><span>Design system</span><span>AI agents</span></div>
+        </article>
+
+        <article class="card">
+          <div class="top"></div>
+          <h3>Agentic data quality</h3>
+          <div class="role">JPMorgan Chase · counterparty data</div>
+          <p>A working data-quality application built solo with AI-assisted development, ahead of any
+          funded program. Profiles ~13M records against authoritative vendor sources, scores and
+          confidence-routes every issue, and puts an AI agent on the ambiguous cases — with a full
+          analyst UI, dashboard, and audit trail.</p>
+          <div class="tech"><span>React</span><span>TypeScript</span><span>Node</span><span>SQLite</span></div>
+        </article>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
+
+  <section class="block field-notes" id="field-notes">
+    <div class="wrap">
+      <div class="kicker"><h2>Field Notes</h2><div class="rule"></div></div>
+      <article class="note-card">
+        <div class="note-card__mark" aria-hidden="true">
+          <span>Field Note 01</span>
+          <strong>Lead.<br>Build.<br>Learn.</strong>
+          <small>Product leadership in practice</small>
+        </div>
+        <div class="note-card__content">
+          <div class="note-meta">AI &amp; product leadership · 8 minute read</div>
+          <h3>Product Leaders Who Build: What AI Is Changing About the Work</h3>
+          <p>AI is shortening the distance between an idea and working proof. That changes what
+          product leaders can contribute, how teams work with engineering and UX, and what leaders
+          need to understand firsthand.</p>
+          <a class="text-link" href="field-notes/product-leaders-who-build/">Read the Field Note</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="block about" id="about">
+    <div class="wrap">
+      <div class="kicker"><h2>About</h2><div class="rule"></div></div>
+      <p>I was born and raised in Charlottesville, Virginia, and started at Capital One at eighteen. I
+      spent close to two decades there, growing from an entry-level job to Director and picking up a
+      real passion for technology and technical execution along the way. I've kept investing in it
+      since, through graduate work, certifications, and lately teaching myself to build.</p>
+      <p>I moved to Delaware about ten years ago, and today I'm a Vice President of Product Management
+      at JPMorgan Chase, in reference data. The work I care most about now is how product management
+      changes when AI is genuinely within reach: the foundations a large organization needs to use it,
+      and the operating model that lets a team build instead of just writing specs. It's the part that
+      doesn't depend on me being in the room.</p>
+      <p>Outside work, I've got four grown kids and a standing preference for being near the water. I
+      fish, I'm outdoors whenever I can be, and I follow sports closely. Most of my best thinking
+      happens away from a screen.</p>
+      <div class="facts">
+        <div><b>Capital One → JPMorgan Chase</b> · 25+ years in financial services</div>
+        <div><b>Executive Leadership</b> · UVA Darden</div>
+        <div><b>Charlottesville, VA → Delaware</b></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block contact" id="contact">
+    <div class="wrap">
+      <div class="kicker"><h2>Contact</h2><div class="rule"></div></div>
+      <div class="lead">Open to conversations about product, AI readiness, and building.</div>
+      <div class="clinks">
+        <a href="mailto:pbrowning81@gmail.com">pbrowning81@gmail.com</a>
+        <a href="https://www.linkedin.com/in/peterbrowningproduct/">LinkedIn</a>
+        <a href="Peter_Browning_Resume_2026.pdf">Résumé (PDF)</a>
+      </div>
+    </div>
+  </section>
+</main>
 
 <footer>
   <div class="wrap">
@@ -238,4 +178,3 @@
 
 </body>
 </html>
-
