@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Working With AI: A Beginner's Field Guide — Peter Browning</title>
+<meta name="description" content="How to actually get started with AI — providers, model tiers, tokens, apps vs IDEs, context, and a real vibe-coded example you can follow along with.">
+<style>
+  :root {
+    /* infographic-decks skill palette */
+    --blue-deep: #004977; --blue-ink: #0B2D44; --blue-mid: #123B5C;
+    --blue-bright: #1071AF; --blue-wash: #E9F1F7;
+    --gray-ink: #333B41; --gray-muted: #6E7A83; --gray-line: #DDE3E8;
+    --gray-line-strong: #C8D1D9; --gray-soft: #F6F8FA; --white: #fff;
+    --good-fg: #2F6C43; --good-bg: #EAF2EC; --bad-fg: #9C3B31; --bad-bg: #F7ECEA;
+    --shadow: 0 18px 50px rgba(11,45,68,.1);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif; color: var(--gray-ink); background: var(--gray-soft); min-height: 100vh; display: flex; flex-direction: column; }
+  .concept-banner { background: var(--blue-deep); color: #fff; text-align: center; font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; padding: .4rem; }
+  .deck { flex: 1; display: flex; flex-direction: column; max-width: 1040px; width: 100%; margin: 0 auto; padding: 1.5rem 1.25rem 0; }
+  .deck-head { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid var(--gray-line-strong); padding-bottom: .75rem; }
+  .deck-head .series { font-size: .78rem; letter-spacing: .14em; text-transform: uppercase; color: var(--blue-deep); font-weight: 600; }
+  .deck-head .counter { font-family: Consolas, "SFMono-Regular", monospace; font-size: .8rem; color: var(--gray-muted); }
+  .stage { flex: 1; position: relative; padding: 2rem 0 1.5rem; }
+  .slide { display: none; animation: rise .35s ease; }
+  .slide.active { display: block; }
+  @keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+  .kicker { font-size: .78rem; letter-spacing: .14em; text-transform: uppercase; color: var(--blue-bright); font-weight: 700; margin-bottom: .85rem; }
+  h1 { font-family: Georgia, "Times New Roman", serif; font-size: clamp(2rem, 5vw, 3.1rem); line-height: 1.12; color: var(--blue-ink); max-width: 800px; }
+  h2 { font-family: Georgia, "Times New Roman", serif; font-size: clamp(1.45rem, 3.2vw, 2.1rem); color: var(--blue-ink); margin-bottom: 1rem; }
+  h3 { color: var(--blue-mid); font-size: 1rem; }
+  p { line-height: 1.62; }
+  .lede { font-size: 1.04rem; color: var(--gray-muted); max-width: 660px; margin-top: 1rem; }
+  .body { font-size: .95rem; max-width: 680px; margin-top: .8rem; }
+  .hint { margin-top: 2.2rem; font-size: .82rem; color: var(--blue-bright); }
+  .hint kbd { border: 1px solid var(--gray-line-strong); border-radius: 4px; padding: .1rem .4rem; background: #fff; font-family: Consolas, monospace; }
+  .aside { margin-top: 1.4rem; max-width: 680px; background: var(--blue-wash); border-left: 4px solid var(--blue-bright); border-radius: 0 10px 10px 0; padding: .95rem 1.15rem; font-size: .9rem; line-height: 1.6; }
+  .placeholder { margin-top: 1.2rem; border: 2px dashed var(--gray-line-strong); border-radius: 10px; background: #fff; color: var(--gray-muted); font-size: .78rem; letter-spacing: .06em; text-transform: uppercase; text-align: center; padding: 2.2rem 1rem; max-width: 680px; }
+
+  .agenda { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: .6rem; margin-top: 1.4rem; list-style: none; }
+  .agenda li { display: flex; gap: .7rem; align-items: baseline; background: #fff; border: 1px solid var(--gray-line); border-radius: 10px; padding: .7rem .85rem; font-size: .9rem; }
+  .agenda .n { font-family: Consolas, monospace; color: var(--blue-bright); font-size: .78rem; }
+  .badge { margin-left: auto; flex-shrink: 0; font-size: .62rem; letter-spacing: .08em; text-transform: uppercase; color: var(--blue-deep); background: var(--blue-wash); border-radius: 20px; padding: .2rem .55rem; font-weight: 700; }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: .9rem; margin-top: 1.2rem; }
+  .card { background: #fff; border: 1px solid var(--gray-line); border-radius: 12px; padding: 1.05rem 1.15rem; box-shadow: var(--shadow); }
+  .card h3 { margin-bottom: .4rem; }
+  .card p { font-size: .84rem; color: var(--gray-muted); line-height: 1.55; }
+  .card .models { font-family: Consolas, monospace; font-size: .74rem; color: var(--blue-bright); margin-bottom: .5rem; }
+  .card .ic { width: 30px; height: 30px; margin-bottom: .55rem; fill: none; stroke: var(--blue-deep); stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+  .wordmark { display: inline-block; margin-bottom: .5rem; padding: .3rem .7rem; border-radius: 8px; font-weight: 800; font-size: .82rem; letter-spacing: .06em; }
+  .wordmark.others { background: var(--blue-wash); color: var(--blue-deep); }
+  .logo-img { display: block; margin: .45rem 0 .9rem; }
+  .logo-img.anthropic { height: 16px; }
+  .logo-img.openai { height: 27px; }
+
+  .twocol { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem; margin-top: 1.2rem; }
+  @media (max-width: 720px) { .twocol { grid-template-columns: 1fr; } }
+  .list-panel { background: #fff; border: 1px solid var(--gray-line); border-radius: 12px; padding: 1rem 1.2rem; }
+  .list-panel h3 { margin-bottom: .6rem; }
+  .list-panel ul { margin-left: 1.05rem; }
+  .list-panel li { font-size: .87rem; line-height: 1.55; margin-bottom: .5rem; }
+
+  table.tiers { width: 100%; max-width: 760px; margin-top: 1.2rem; border-collapse: collapse; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow); }
+  .tiers th, .tiers td { padding: .75rem .9rem; text-align: left; font-size: .86rem; border-bottom: 1px solid var(--gray-line); }
+  .tiers th { background: var(--blue-ink); color: #fff; font-size: .74rem; letter-spacing: .08em; text-transform: uppercase; }
+  .tiers td:first-child { font-weight: 700; color: var(--blue-mid); white-space: nowrap; }
+  .tiers .m { font-family: Consolas, monospace; font-size: .8rem; }
+  .tiers small { display: block; color: var(--gray-muted); font-size: .72rem; margin-top: .15rem; }
+
+  .gauges { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; max-width: 700px; margin-top: 1.4rem; }
+  @media (max-width: 640px) { .gauges { grid-template-columns: 1fr; } }
+  .gauge { background: #fff; border: 1px solid var(--gray-line); border-radius: 12px; padding: 1rem; text-align: center; }
+  .gauge .bar { height: 10px; border-radius: 6px; background: var(--gray-line); overflow: hidden; margin: .7rem 0 .5rem; }
+  .gauge .bar i { display: block; height: 100%; background: var(--blue-bright); }
+  .gauge strong { font-size: .88rem; color: var(--blue-mid); }
+  .gauge small { color: var(--gray-muted); font-size: .74rem; }
+
+  .plans { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem; margin-top: 1.3rem; max-width: 760px; }
+  @media (max-width: 680px) { .plans { grid-template-columns: 1fr; } }
+  .plan-col { background: #fff; border: 1px solid var(--gray-line); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow); }
+  .plan-col > header { background: var(--blue-ink); color: #fff; padding: .65rem 1.1rem; font-weight: 700; font-size: .9rem; }
+  .plan { display: flex; justify-content: space-between; align-items: baseline; gap: .8rem; padding: .85rem 1.1rem; border-top: 1px solid var(--gray-line); }
+  .plan:first-of-type { border-top: none; }
+  .plan .nm { font-weight: 700; color: var(--blue-mid); font-size: .9rem; }
+  .plan .nm small { display: block; font-weight: 400; color: var(--gray-muted); font-size: .74rem; margin-top: .1rem; }
+  .plan .pr { font-family: Georgia, serif; font-size: 1.3rem; color: var(--blue-deep); white-space: nowrap; }
+  .plan .pr small { font-size: .7rem; color: var(--gray-muted); font-family: "Segoe UI", sans-serif; }
+  .plan.hot { background: var(--blue-wash); }
+  .plans-cap { max-width: 760px; margin-top: .6rem; color: var(--gray-muted); font-size: .74rem; }
+
+  .ide { max-width: 720px; margin-top: 1.3rem; border: 1px solid var(--gray-line-strong); border-radius: 12px; overflow: hidden; background: #fff; box-shadow: var(--shadow); font-size: .72rem; }
+  .ide-bar { display: flex; align-items: center; gap: .45rem; background: var(--blue-ink); padding: .5rem .8rem; color: #B9CBD9; }
+  .ide-bar i { width: 10px; height: 10px; border-radius: 50%; background: #3E5A73; }
+  .ide-bar span { margin-left: .4rem; }
+  .ide-body { display: grid; grid-template-columns: 130px 1fr 190px; min-height: 210px; }
+  @media (max-width: 680px) { .ide-body { grid-template-columns: 1fr; } }
+  .ide-side { background: var(--gray-soft); border-right: 1px solid var(--gray-line); padding: .7rem; }
+  .ide-side b { display: block; color: var(--gray-muted); font-size: .62rem; letter-spacing: .08em; margin-bottom: .5rem; }
+  .ide-side i { display: block; height: 8px; border-radius: 4px; background: var(--gray-line-strong); margin-bottom: .45rem; }
+  .ide-code { padding: .8rem .9rem; }
+  .ide-code i { display: block; height: 8px; border-radius: 4px; margin-bottom: .5rem; background: var(--gray-line); }
+  .ide-code i.b { background: var(--blue-bright); opacity: .55; }
+  .ide-code i.d { background: var(--blue-deep); opacity: .45; }
+  .ide-ai { border-left: 1px solid var(--gray-line); padding: .7rem .8rem; background: var(--blue-wash); }
+  .ide-ai b { display: block; color: var(--blue-deep); font-size: .64rem; letter-spacing: .08em; margin-bottom: .55rem; }
+  .ide-ai .bub { border-radius: 8px; padding: .45rem .55rem; font-size: .66rem; line-height: 1.45; margin-bottom: .45rem; background: #fff; border: 1px solid var(--gray-line); }
+  .ide-ai .bub.you { background: var(--blue-deep); color: #fff; border: none; }
+  .ide-cap { max-width: 720px; margin-top: .55rem; color: var(--gray-muted); font-size: .74rem; }
+
+  .proscons { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem; margin-top: 1.2rem; }
+  @media (max-width: 720px) { .proscons { grid-template-columns: 1fr; } }
+  .pc { background: #fff; border: 1px solid var(--gray-line); border-radius: 12px; overflow: hidden; }
+  .pc header { background: var(--blue-ink); color: #fff; padding: .6rem 1rem; font-size: .85rem; font-weight: 700; }
+  .pc ul { list-style: none; padding: .8rem 1rem; }
+  .pc li { font-size: .84rem; line-height: 1.5; padding-left: 1.2rem; position: relative; margin-bottom: .45rem; }
+  .pc li.plus::before { content: "+"; position: absolute; left: 0; color: var(--good-fg); font-weight: 800; }
+  .pc li.minus::before { content: "−"; position: absolute; left: 0; color: var(--bad-fg); font-weight: 800; }
+
+  .check { list-style: none; margin-top: 1.3rem; max-width: 640px; counter-reset: c; }
+  .check li { counter-increment: c; display: flex; gap: .9rem; align-items: flex-start; background: #fff; border: 1px solid var(--gray-line); border-radius: 12px; padding: .9rem 1.05rem; margin-bottom: .6rem; }
+  .check li::before { content: counter(c); flex-shrink: 0; width: 1.7rem; height: 1.7rem; border-radius: 50%; background: var(--blue-deep); color: #fff; display: grid; place-items: center; font-size: .82rem; font-weight: 700; }
+  .check strong { display: block; font-size: .92rem; color: var(--blue-mid); }
+  .check small { color: var(--gray-muted); font-size: .8rem; line-height: 1.5; }
+
+  .demo { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.2rem; }
+  @media (max-width: 760px) { .demo { grid-template-columns: 1fr; } }
+  .prompt-box { border-radius: 12px; border: 1px solid var(--gray-line); background: #fff; overflow: hidden; }
+  .prompt-box header { padding: .55rem .9rem; font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; }
+  .prompt-box.weak header { background: var(--bad-bg); color: var(--bad-fg); }
+  .prompt-box.strong header { background: var(--good-bg); color: var(--good-fg); }
+  .prompt-box .msg { padding: .75rem .95rem; font-size: .84rem; line-height: 1.55; border-top: 1px solid var(--gray-line); }
+  .prompt-box .msg.user { font-family: Consolas, monospace; background: var(--gray-soft); font-size: .78rem; }
+  .prompt-box .msg .who { display: block; font-size: .64rem; letter-spacing: .1em; text-transform: uppercase; color: var(--gray-muted); margin-bottom: .3rem; }
+  .annot { font-size: .78rem; color: var(--blue-bright); padding: .5rem .95rem .8rem; }
+
+  .doorways { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.4rem; }
+  @media (max-width: 720px) { .doorways { grid-template-columns: 1fr; } }
+  .doorway { background: var(--blue-ink); color: #fff; border-radius: 14px; padding: 1.15rem 1.3rem; }
+  .doorway .tag { font-size: .62rem; letter-spacing: .12em; text-transform: uppercase; color: #9fc1d8; }
+  .doorway h3 { color: #fff; margin: .3rem 0 .4rem; }
+  .doorway p { font-size: .84rem; line-height: 1.55; color: #d3dfe8; }
+  .doorway .go { display: inline-block; margin-top: .55rem; color: #fff; font-weight: 700; font-size: .82rem; text-decoration: none; border-bottom: 1px solid var(--blue-bright); }
+
+  .deck-nav { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem 0 1.4rem; border-top: 1px solid var(--gray-line-strong); }
+  .deck-nav button { font: inherit; font-size: .88rem; font-weight: 600; color: var(--blue-deep); background: #fff; border: 1px solid var(--gray-line-strong); border-radius: 10px; padding: .6rem 1.1rem; cursor: pointer; }
+  .deck-nav button:hover { border-color: var(--blue-bright); }
+  .deck-nav button:disabled { opacity: .35; cursor: default; }
+  .dots { display: flex; gap: .4rem; flex-wrap: wrap; }
+  .dots i { width: 8px; height: 8px; border-radius: 50%; background: var(--gray-line-strong); cursor: pointer; }
+  .dots i.on { background: var(--blue-bright); }
+</style>
+</head>
+<body>
+
+<div class="deck">
+  <div class="deck-head">
+    <span class="series"><a href="/" style="color:inherit;text-decoration:none;">Peter Browning</a> · Field Note 02</span>
+    <span class="counter"><span id="cur">1</span> / <span id="total">13</span></span>
+  </div>
+
+  <div class="stage">
+
+    <!-- 1 · Cover -->
+    <section class="slide active">
+      <div class="kicker">From daily practice, not theory</div>
+      <h1>Working With AI:<br>A Beginner's Field Guide</h1>
+      <p class="lede">How to actually get started — the providers, the models, the tools,
+      and what to do first. I use this stuff every day to ship real things. This is
+      what I'd tell you over coffee.</p>
+      <p class="hint">Navigate with <kbd>←</kbd> <kbd>→</kbd>, the arrows below, or the dots. Every page is linkable.</p>
+    </section>
+
+    <!-- 2 · Who this is for -->
+    <section class="slide">
+      <div class="kicker">Before we start</div>
+      <h2>Who this is for</h2>
+      <p class="body">Unless you've been living under a rock, you already know roughly
+      what AI and large language models are. We're skipping that. This guide is about
+      <strong>getting started</strong>: maybe you're a product owner who wants to learn
+      to vibe code, or you're just curious whether AI can take a few routine chores off
+      your plate. Providers, models, tools, first steps — covered.</p>
+      <div class="aside">
+        Fair warning: this is my experience, not a certification. I'm not a pro — I'm a
+        product guy who started using AI daily and ended up shipping real software with
+        it. I'm writing down what I learned because the answer to "where do I start?"
+        shouldn't take months to find. It took me months.
+      </div>
+    </section>
+
+    <!-- 2b · The map -->
+    <section class="slide">
+      <div class="kicker">What's ahead</div>
+      <h2>The map</h2>
+      <p class="lede">Eleven short topics, ending with a real worked example. Four of them
+      open doors to deeper dives — published separately as this series grows.</p>
+      <ul class="agenda">
+        <li><span class="n">01</span> What can you even do with AI?</li>
+        <li><span class="n">02</span> What I've personally used it for</li>
+        <li><span class="n">03</span> Providers &amp; their apps</li>
+        <li><span class="n">04</span> Models come in tiers</li>
+        <li><span class="n">05</span> Tokens are the gasoline</li>
+        <li><span class="n">06</span> What it costs to play</li>
+        <li><span class="n">07</span> The app, or the toolbox (IDE)</li>
+        <li><span class="n">08</span> What you need to start</li>
+        <li><span class="n">09</span> Context is the whole game <span class="badge">deep dive</span></li>
+        <li><span class="n">10</span> The operator matters more <span class="badge">deep dive ×2</span></li>
+        <li><span class="n">11</span> Vibe coding — with a real example <span class="badge">deep dive</span></li>
+      </ul>
+    </section>
+
+    <!-- 3 · What can you do -->
+    <section class="slide">
+      <div class="kicker">The obvious first question</div>
+      <h2>"What can I even do with AI?"</h2>
+      <div class="cards">
+        <div class="card">
+          <svg class="ic" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M7 6.5h.01M10 6.5h.01"/></svg>
+          <h3>Build your own app or website</h3><p>From a simple page to genuinely complex software — without waiting on anyone.</p></div>
+        <div class="card">
+          <svg class="ic" viewBox="0 0 24 24"><rect x="5" y="7" width="14" height="11" rx="2"/><path d="M9 11h.01M15 11h.01M9 15h6M12 7V4M8 4h8"/></svg>
+          <h3>Create agents with skills</h3><p>Teach AI your rules and let it run specific, complex tasks on its own.</p></div>
+        <div class="card">
+          <svg class="ic" viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-8M21 20H3"/></svg>
+          <h3>Analysis and decks</h3><p>Detailed analysis, drafted documents, and presentation decks with precision.</p></div>
+        <div class="card">
+          <svg class="ic" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7M3 4v5h5"/></svg>
+          <h3>Automate the routine</h3><p>The small recurring stuff you do every week is exactly what it eats first.</p></div>
+      </div>
+      <p class="body">The possibilities really are endless. All you need is an idea and
+      some curiosity, and you can get good at this faster than you'd expect.</p>
+    </section>
+
+    <!-- 4 · What I've used it for -->
+    <section class="slide">
+      <div class="kicker">Receipts</div>
+      <h2>What I've personally used it for</h2>
+      <div class="twocol">
+        <div class="list-panel">
+          <h3>At work</h3>
+          <ul>
+            <li>Working, near-production-grade prototypes in <strong>days</strong> — instead of waiting months for engineering capacity just to get real user feedback</li>
+            <li>Live experiments on complex use cases in user-facing apps</li>
+            <li>Automated software release notes straight from Jira tickets</li>
+            <li>An agent that writes Jira stories off a prototype</li>
+            <li>An estimator agent that sizes new work against similar completed work</li>
+            <li>Interactive presentations and training guides you can attach to an email</li>
+            <li>Reverse-engineering legacy logic and calculations — saving real development time</li>
+          </ul>
+        </div>
+        <div class="list-panel">
+          <h3>At home</h3>
+          <ul>
+            <li>Built <strong>FlowIt</strong>, a personal product-ops app that keeps me focused on what actually matters</li>
+            <li>Built and shipped <strong>Exile Forge</strong>, a live game-economy advisor with real market data</li>
+            <li>This guide you're reading — built with the same AI it teaches</li>
+          </ul>
+        </div>
+      </div>
+      <p class="body">None of that required me to be an engineer. And honestly? It's
+      <em>easy</em> to get started. That's the part people don't believe until they try.</p>
+    </section>
+
+    <!-- 5 · Providers -->
+    <section class="slide">
+      <div class="kicker">The players</div>
+      <h2>Two core providers, plus a chasing pack</h2>
+      <div class="cards">
+        <div class="card"><img class="logo-img anthropic" src="assets/anthropic-logo.svg" alt="Anthropic"><div class="models">app: Claude</div><p>One of the two core players. Their models power everything I've built this year.</p></div>
+        <div class="card"><img class="logo-img openai" src="assets/openai-logo.svg" alt="OpenAI"><div class="models">app: ChatGPT</div><p>The other core player, and the household name most people meet first.</p></div>
+        <div class="card"><span class="wordmark others">+ THE FIELD</span><h3>The second bucket</h3><div class="models">Google Gemini · xAI Grok</div><p>Capable and improving fast — just not where I'd point a beginner today.</p></div>
+      </div>
+      <div class="aside">
+        The competition from China is real, too: Moonshot's open-weights
+        <strong>Kimi K3</strong> debuted at #3 on the leaderboards this summer, right
+        behind the two US frontier models. Worth knowing; not where you start.
+      </div>
+      <p class="body">Both camps have fans who will lobby you hard. Both are highly
+      capable, with their own pros and cons. My recommendation: <strong>just pick
+      one.</strong> If you get into it, try the other. Maybe you keep both, maybe one
+      wins you over. Either way they update constantly, so a little curiosity about
+      what's new goes a long way. This guide focuses on these two.</p>
+    </section>
+
+    <!-- 6 · Model tiers -->
+    <section class="slide">
+      <div class="kicker">Not all models are equal</div>
+      <h2>Models come in tiers</h2>
+      <p class="body">Every provider ships a lineup, and it helps to know the shape of it.
+      Oversimplifying on purpose: there's a <strong>frontier</strong> model (the premier
+      brain), a <strong>mid-tier</strong>, and <strong>efficient</strong> models for
+      everyday work. Different tools for different jobs — the smaller ones are still
+      highly capable.</p>
+      <table class="tiers">
+        <tr><th>Tier</th><th>Anthropic</th><th>OpenAI</th></tr>
+        <tr>
+          <td>Frontier</td>
+          <td class="m">Fable 5<small>Mythos 5 is its restricted-access sibling — same underlying model, available only to approved organizations</small></td>
+          <td class="m">GPT-5.6 Sol</td>
+        </tr>
+        <tr><td>Mid-tier</td><td class="m">Opus</td><td class="m">GPT-5.6 Terra</td></tr>
+        <tr><td>Everyday / fast</td><td class="m">Sonnet · Haiku</td><td class="m">GPT-5.6 Luna</td></tr>
+      </table>
+      <p class="body"><small style="color:var(--gray-muted)">Accurate as of August 2026.
+      The names on this table will age; the tier idea won't.</small></p>
+    </section>
+
+    <!-- 7 · Tokens -->
+    <section class="slide">
+      <div class="kicker">Why the tiers matter</div>
+      <h2>Tokens are the gasoline</h2>
+      <p class="body">Think of it like gas in a car: more horsepower usually burns more
+      fuel. Same deal with AI. Bigger models need more compute, which means more energy,
+      which means more cost. The unit you're burning is called a <strong>token</strong>,
+      and you spend them every time you use AI. Frontier models chew through your plan's
+      limits much faster than the everyday ones.</p>
+      <div class="gauges">
+        <div class="gauge"><strong>Everyday model</strong><div class="bar"><i style="width:22%"></i></div><small>Sips tokens. Great daily driver.</small></div>
+        <div class="gauge"><strong>Mid-tier</strong><div class="bar"><i style="width:55%"></i></div><small>More muscle, moderate burn.</small></div>
+        <div class="gauge"><strong>Frontier</strong><div class="bar"><i style="width:92%"></i></div><small>The V8. Save it for hard problems.</small></div>
+      </div>
+      <p class="body">Knowing how much horsepower the job actually needs is how you get
+      things done efficiently. That's genuinely all you need to know for now — the rest
+      comes with use.</p>
+    </section>
+
+    <!-- 8 · Plans -->
+    <section class="slide">
+      <div class="kicker">The money question</div>
+      <h2>What it costs to play</h2>
+      <p class="body">Both providers run subscriptions. There's a free tier, but if you
+      want to do anything meaningful, the real starting line is the
+      <strong>$20/month plan</strong>. Plans scale up to around $200 for max tiers —
+      that's for heavy, daily users. For 90% of people, $20 is all you need.</p>
+      <div class="plans">
+        <div class="plan-col">
+          <header>Claude (Anthropic)</header>
+          <div class="plan hot"><span class="nm">Pro<small>Start here — the everyday plan</small></span><span class="pr">$20<small>/mo</small></span></div>
+          <div class="plan"><span class="nm">Max<small>Heavy, daily users only</small></span><span class="pr">$100–200<small>/mo</small></span></div>
+        </div>
+        <div class="plan-col">
+          <header>ChatGPT (OpenAI)</header>
+          <div class="plan hot"><span class="nm">Plus<small>Start here — the everyday plan</small></span><span class="pr">$20<small>/mo</small></span></div>
+          <div class="plan"><span class="nm">Pro<small>Heavy, daily users only</small></span><span class="pr">$200<small>/mo</small></span></div>
+        </div>
+      </div>
+      <p class="plans-cap">Prices verified August 2026 — both providers also have free tiers worth trying first. Check their current pricing pages before subscribing.</p>
+      <p class="body">Twenty bucks for a tireless assistant that can code, analyze, and
+      draft. I've spent more on worse.</p>
+    </section>
+
+    <!-- 9 · App vs IDE -->
+    <section class="slide">
+      <div class="kicker">Two ways in</div>
+      <h2>The app, or the toolbox</h2>
+      <p class="body">The chat apps — Claude and ChatGPT — are one way in, and where most
+      people should start. But here's where it gets a little techy. Developers live in
+      something called an <strong>IDE</strong> — an integrated development environment.
+      If you passed a pickup truck with a toolbox on the back, you'd guess there's a
+      hammer, a drill, and a level inside. An IDE is that toolbox for building software:
+      one app that gathers the tools, including direct connections to AI models from
+      every provider. The most common one is VS Code.</p>
+      <div class="ide" role="img" aria-label="Schematic of an IDE: file explorer, code editor, and an AI assistant panel side by side">
+        <div class="ide-bar"><i></i><i></i><i></i><span>my-first-app — IDE (e.g. VS Code)</span></div>
+        <div class="ide-body">
+          <div class="ide-side"><b>FILES</b><i style="width:80%"></i><i style="width:65%"></i><i style="width:72%"></i><i style="width:50%"></i><i style="width:60%"></i></div>
+          <div class="ide-code">
+            <i class="d" style="width:38%"></i><i style="width:72%"></i><i class="b" style="width:55%"></i><i style="width:64%"></i>
+            <i class="b" style="width:47%"></i><i style="width:30%"></i><i class="d" style="width:52%"></i><i style="width:68%"></i><i class="b" style="width:41%"></i>
+          </div>
+          <div class="ide-ai">
+            <b>AI ASSISTANT</b>
+            <div class="bub you">Add a dark mode toggle to the settings page</div>
+            <div class="bub">Done — added the toggle and wired it to save the preference. Want me to run the tests?</div>
+          </div>
+        </div>
+      </div>
+      <p class="ide-cap">Schematic, not a screenshot: your files on the left, your code in the middle, and the AI working alongside — all in one app.</p>
+      <div class="proscons">
+        <div class="pc">
+          <header>Native apps (Claude, ChatGPT)</header>
+          <ul>
+            <li class="plus">Easiest possible start — sign up and go</li>
+            <li class="plus">Chat, coding, and cowork features in one place</li>
+            <li class="plus">Most polished experience</li>
+            <li class="minus">Less control over how things connect</li>
+          </ul>
+        </div>
+        <div class="pc">
+          <header>IDE route (e.g. VS Code + models)</header>
+          <ul>
+            <li class="plus">Often the sanctioned path inside big companies where native apps are blocked</li>
+            <li class="plus">Pick and switch models from any provider</li>
+            <li class="plus">Grows with you as projects get serious</li>
+            <li class="minus">More setup, steeper learning curve</li>
+          </ul>
+        </div>
+      </div>
+      <p class="body">Learning from home? Start with the native app. Sitting inside a
+      Fortune 500 with security restrictions? The IDE route may be your only option.
+      Learning both paths pays off over time.</p>
+    </section>
+
+    <!-- 10 · What you need -->
+    <section class="slide">
+      <div class="kicker">The whole barrier to entry</div>
+      <h2>What you need to start</h2>
+      <ol class="check">
+        <li><div><strong>A computer</strong><small>Any modern desktop or laptop with decent RAM and an SSD. Nothing high-end — the models do their work in the cloud, not on your machine.</small></div></li>
+        <li><div><strong>A $20 subscription</strong><small>Claude or ChatGPT. Flip a coin if you have to; you can switch later.</small></div></li>
+        <li><div><strong>The app</strong><small>The provider's own app to start. An IDE later, if and when you get techy.</small></div></li>
+        <li><div><strong>An idea</strong><small>The only genuinely required hardware. A real, small annoyance in your week works better than a grand vision.</small></div></li>
+      </ol>
+    </section>
+
+    <!-- 11 · Prompting / context -->
+    <section class="slide">
+      <div class="kicker">The skill itself</div>
+      <h2>Context is the whole game</h2>
+      <p class="body">Feed the model a lazy prompt and it will do its best to guess what
+      you meant. People are surprised by how good the guessing is. They're a lot more
+      surprised when the guessing <em>stops</em> — and that's what context does. Think of
+      context as an arrow: you want it pointed straight at the target. The more relevant
+      context you give, the more accurate the shot.</p>
+      <div class="demo">
+        <div class="prompt-box weak">
+          <header>Asking cold</header>
+          <div class="msg user"><span class="who">You</span>make my resume better</div>
+          <div class="msg"><span class="who">AI</span>Ten generic resume tips that apply to every human alive. Polite, fluent, useless.</div>
+          <div class="annot">The model isn't bad — it's guessing, because you made it guess.</div>
+        </div>
+        <div class="prompt-box strong">
+          <header>Pointing the arrow</header>
+          <div class="msg user"><span class="who">You</span>Here's my resume [pasted] and the job posting [pasted]. 12 years in product. Rewrite my summary and top 3 bullets to match what this role asks for. Keep only numbers I can defend. Cut every buzzword.</div>
+          <div class="msg"><span class="who">AI</span>A focused rewrite in your own vocabulary, mapped to that posting's actual requirements.</div>
+          <div class="annot">Same model. The context did the work — and fewer do-overs means fewer tokens, which means it's cheaper too.</div>
+        </div>
+      </div>
+      <div class="aside">One warning: you can overdo it. Dumping everything you've ever
+      written on the model muddies the aim. Enough context to point the arrow — not the
+      whole quiver.</div>
+    </section>
+
+    <!-- 12 · The operator -->
+    <section class="slide">
+      <div class="kicker">The part nobody tells beginners</div>
+      <h2>The operator matters more than the model</h2>
+      <p class="body">The models are great. The person operating them matters more. Two
+      people with the same $20 subscription get wildly different results, and the gap is
+      operator skill: knowing what to hand the model, when to trust the output, and when
+      to check it. That skill compounds — and it goes further than prompts. Eventually
+      you can teach the AI your rules and your domain: standing instructions called
+      <strong>skills</strong>, and <strong>agents</strong> that run whole jobs with them.
+      That's how the model goes from guessing at your world to working in it.</p>
+      <div class="doorways">
+        <div class="doorway">
+          <span class="tag">Deep dive · next in this series</span>
+          <h3>Agents &amp; Skills</h3>
+          <p>Teaching AI your rules, then letting it run whole jobs — with real examples from my own setup.</p>
+          <a class="go" href="#">Coming next →</a>
+        </div>
+        <div class="doorway">
+          <span class="tag">Deep dive · in progress</span>
+          <h3>The Operator Ladder</h3>
+          <p>The levels of working with AI, from prompt-and-wait to running a fleet — and how to climb.</p>
+          <a class="go" href="#">Coming soon →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 13 · Vibe coding -->
+    <section class="slide">
+      <div class="kicker">The term you keep hearing</div>
+      <h2>Vibe coding — what is it?</h2>
+      <p class="body">Vibe coding is using natural language — plain English — to get
+      AI to produce software, analysis, or some other finished output. No syntax, no
+      programming background. You describe what you want; the AI builds it; you react
+      and refine. You can vibe code an app, a slide deck, a dashboard, or an agent
+      that reads your email once a day and sends you a recap.</p>
+      <div class="aside">Everything you've read in this guide feeds it: pick the right
+      model tier for the job, hand over real context, and iterate like an operator.
+      Vibe coding is just those habits pointed at building something.</div>
+      <p class="body">So now that you know what it is — let's put all of this into
+      practice, for real, on the next page.</p>
+    </section>
+
+    <!-- 14 · Vibe coding example -->
+    <section class="slide">
+      <div class="kicker">Put it all to practice</div>
+      <h2>A real vibe-coded example, start to finish</h2>
+      <div class="demo" style="grid-template-columns: 1fr;">
+        <div class="prompt-box strong">
+          <header>Step 1 — the ask (one well-aimed prompt)</header>
+          <div class="msg user"><span class="who">You</span>Here's a spreadsheet of my last 12 months of spending [attached: sample-spend.csv]. Analyze the spend patterns — totals by category, month-to-month trends, anything unusual. Then build a one-page dashboard with the top metrics, two simple charts, and 3–4 insights written in plain English. Keep it readable on my phone.</div>
+          <div class="annot">Notice what's in there: the data itself, the specific analysis wanted, the exact deliverable, and a constraint. The arrow is pointed.</div>
+        </div>
+      </div>
+      <p class="body"><strong>Step 2 — the AI works.</strong> It reads the file, computes
+      totals and trends, finds the stories in the numbers, and writes a working web page.
+      No code from you at any point. A few minutes, start to finish.</p>
+      <p class="body"><strong>Step 3 — the output.</strong> This is the actual result,
+      live, built from that exact prompt and spreadsheet — scroll it, hover the charts:</p>
+      <iframe src="assets/vibe-dashboard-sample.html" title="The vibe-coded spending dashboard — actual output"
+        style="width:100%; height:460px; border:1px solid var(--gray-line-strong); border-radius:12px; background:#fff; margin-top:.6rem;"></iframe>
+      <p class="body"><a href="assets/vibe-dashboard-sample.html" target="_blank" rel="noreferrer" style="color:var(--blue-bright); font-weight:600;">Open the dashboard full size ↗</a>
+      &nbsp;·&nbsp; It found the story on its own: subscriptions quietly crept up 58% in a year.
+      That's vibe coding.</p>
+      <div class="aside">Full disclosure: this is the exact example a peer showed me six
+      months ago — the demo that got me started, the one I wrote about in my first Field
+      Note. If it does for you what it did for me, this guide paid for itself.</div>
+    </section>
+
+    <!-- 15 · Start this week -->
+    <section class="slide">
+      <div class="kicker">That's it. Go.</div>
+      <h2>Start this week</h2>
+      <p class="body">A computer you already own, twenty dollars, an app, and one real
+      idea. Pick a small, genuine annoyance in your week and point the AI at it. You'll
+      learn more in one honest attempt than in a month of reading about it — this guide
+      included.</p>
+      <div class="aside">
+        More in this series as it grows: Agents &amp; Skills, The Operator Ladder, and
+        how I built an AI product that has to show its receipts. All at
+        <strong>petebrowning.com</strong> — and I'm always up for comparing notes on
+        LinkedIn.
+      </div>
+    </section>
+  </div>
+
+  <div class="deck-nav">
+    <button id="prev" type="button">← Previous</button>
+    <div class="dots" id="dots"></div>
+    <button id="next" type="button">Next →</button>
+  </div>
+</div>
+
+<script>
+  const slides = [...document.querySelectorAll('.slide')];
+  const dots = document.getElementById('dots');
+  slides.forEach((_, i) => {
+    const d = document.createElement('i');
+    d.addEventListener('click', () => show(i));
+    dots.appendChild(d);
+  });
+  let idx = Math.min(slides.length - 1, Math.max(0, (parseInt(location.hash.slice(6)) || 1) - 1));
+  function show(i) {
+    idx = Math.min(slides.length - 1, Math.max(0, i));
+    slides.forEach((s, j) => s.classList.toggle('active', j === idx));
+    [...dots.children].forEach((d, j) => d.classList.toggle('on', j === idx));
+    document.getElementById('cur').textContent = idx + 1;
+    document.getElementById('prev').disabled = idx === 0;
+    document.getElementById('next').disabled = idx === slides.length - 1;
+    history.replaceState(null, '', '#page-' + (idx + 1));
+  }
+  document.getElementById('total').textContent = slides.length;
+  document.getElementById('prev').addEventListener('click', () => show(idx - 1));
+  document.getElementById('next').addEventListener('click', () => show(idx + 1));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight') show(idx + 1);
+    if (e.key === 'ArrowLeft') show(idx - 1);
+  });
+  show(idx);
+</script>
+</body>
+</html>

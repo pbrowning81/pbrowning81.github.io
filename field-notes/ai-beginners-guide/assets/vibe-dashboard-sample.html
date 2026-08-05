@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spending Dashboard — sample vibe-coded output</title>
+<style>
+  :root {
+    --blue-deep: #004977; --blue-ink: #0B2D44; --blue-bright: #1071AF; --blue-wash: #E9F1F7;
+    --ink: #333B41; --muted: #6E7A83; --line: #DDE3E8; --soft: #F6F8FA;
+    --warn-fg: #9C3B31; --warn-bg: #F7ECEA; --good-fg: #2F6C43;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif; background: var(--soft); color: var(--ink); padding: 1.4rem; }
+  .wrap { max-width: 860px; margin: 0 auto; }
+  header h1 { font-family: Georgia, serif; font-size: 1.5rem; color: var(--blue-ink); }
+  header p { color: var(--muted); font-size: .84rem; margin-top: .25rem; }
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: .8rem; margin-top: 1.1rem; }
+  .tile { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: .85rem 1rem; }
+  .tile small { display: block; color: var(--muted); font-size: .68rem; letter-spacing: .07em; text-transform: uppercase; }
+  .tile b { display: block; font-size: 1.45rem; color: var(--blue-ink); margin-top: .25rem; font-variant-numeric: tabular-nums; }
+  .tile .delta { font-size: .74rem; font-weight: 700; }
+  .delta.warn { color: var(--warn-fg); }
+  .delta.good { color: var(--good-fg); }
+  .panel { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 1rem 1.15rem; margin-top: .9rem; }
+  .panel h2 { font-size: .92rem; color: var(--blue-ink); margin-bottom: .7rem; }
+  .bars { display: grid; gap: 7px; }
+  .barrow { display: grid; grid-template-columns: 110px 1fr 70px; gap: .6rem; align-items: center; font-size: .8rem; }
+  .barrow .track { height: 14px; background: transparent; }
+  .barrow .track i { display: block; height: 100%; background: var(--blue-bright); border-radius: 0 4px 4px 0; transition: filter .12s; }
+  .barrow:hover .track i { filter: brightness(1.15); }
+  .barrow .v { text-align: right; color: var(--muted); font-variant-numeric: tabular-nums; }
+  svg text { font-family: inherit; }
+  .insights li { font-size: .87rem; line-height: 1.55; margin: 0 0 .55rem 1.1rem; }
+  .insights .flag { font-weight: 700; }
+  .insights .flag.warn { color: var(--warn-fg); }
+  footer { margin-top: 1rem; color: var(--muted); font-size: .7rem; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Where the money went — last 12 months</h1>
+    <p>Aug 2025 – Jul 2026 · built from sample-spend.csv · all figures computed from the file</p>
+  </header>
+
+  <div class="tiles">
+    <div class="tile"><small>Total spend</small><b>$27,150</b></div>
+    <div class="tile"><small>Average month</small><b>$2,262</b></div>
+    <div class="tile"><small>Biggest category</small><b>Groceries</b><span class="delta">$7,236 · 27% of total</span></div>
+    <div class="tile"><small>Subscriptions</small><b>$124/mo</b><span class="delta warn">▲ +58% vs a year ago</span></div>
+  </div>
+
+  <div class="panel">
+    <h2>Spend by category</h2>
+    <div class="bars">
+      <div class="barrow"><span>Groceries</span><span class="track"><i style="width:100%"  title="Groceries $7,236"></i></span><span class="v">$7,236</span></div>
+      <div class="barrow"><span>Dining</span><span class="track"><i style="width:57.4%" title="Dining $4,156"></i></span><span class="v">$4,156</span></div>
+      <div class="barrow"><span>Insurance</span><span class="track"><i style="width:51.4%" title="Insurance $3,720"></i></span><span class="v">$3,720</span></div>
+      <div class="barrow"><span>Utilities</span><span class="track"><i style="width:47.9%" title="Utilities $3,468"></i></span><span class="v">$3,468</span></div>
+      <div class="barrow"><span>Shopping</span><span class="track"><i style="width:42.8%" title="Shopping $3,094"></i></span><span class="v">$3,094</span></div>
+      <div class="barrow"><span>Gas</span><span class="track"><i style="width:33.9%" title="Gas $2,454"></i></span><span class="v">$2,454</span></div>
+      <div class="barrow"><span>Entertainment</span><span class="track"><i style="width:24.8%" title="Entertainment $1,797"></i></span><span class="v">$1,797</span></div>
+      <div class="barrow"><span>Subscriptions</span><span class="track"><i style="width:16.9%" title="Subscriptions $1,225"></i></span><span class="v">$1,225</span></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>Monthly total</h2>
+    <svg viewBox="0 0 560 150" width="100%" role="img" aria-label="Monthly spending, August 2025 through July 2026, ranging from $2,058 to $2,440">
+      <line x1="20" y1="130" x2="540" y2="130" stroke="#DDE3E8" stroke-width="1"/>
+      <line x1="20" y1="70" x2="540" y2="70" stroke="#EEF1F4" stroke-width="1"/>
+      <line x1="20" y1="10" x2="540" y2="10" stroke="#EEF1F4" stroke-width="1"/>
+      <text x="12" y="134" font-size="9" fill="#6E7A83" text-anchor="end">$2.0k</text>
+      <text x="12" y="14" font-size="9" fill="#6E7A83" text-anchor="end">$2.5k</text>
+      <polyline fill="none" stroke="#1071AF" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"
+        points="20,66.6 67.3,105.5 114.5,38.3 161.8,80.3 209.1,27.8 256.4,116.1 303.6,39.5 350.9,83.2 398.2,24.4 445.5,58.7 492.7,61.4 540,101.4"/>
+      <circle cx="398.2" cy="24.4" r="4" fill="#1071AF"><title>Apr 2026 · $2,440 (highest)</title></circle>
+      <circle cx="256.4" cy="116.1" r="4" fill="#fff" stroke="#1071AF" stroke-width="2"><title>Jan 2026 · $2,058 (lowest)</title></circle>
+      <text x="398.2" y="14" font-size="9" fill="#333B41" text-anchor="middle">$2,440</text>
+      <text x="256.4" y="132" font-size="9" fill="#333B41" text-anchor="middle" dy="10">$2,058</text>
+      <text x="20" y="146" font-size="9" fill="#6E7A83">Aug '25</text>
+      <text x="540" y="146" font-size="9" fill="#6E7A83" text-anchor="end">Jul '26</text>
+    </svg>
+  </div>
+
+  <div class="panel">
+    <h2>What the numbers say</h2>
+    <ul class="insights">
+      <li><span class="flag warn">▲ The quiet leak:</span> subscriptions crept from $79 to $124 a month — up 58% in a year, one small add at a time. Worth a ten-minute audit.</li>
+      <li><span class="flag">December dining hit $585</span> against a $346 monthly average. Holiday spike — predictable, so budget for it next year instead of being surprised by it.</li>
+      <li><span class="flag good">▼ Gas fell 26%</span> across the year ($231 → $170/mo).</li>
+      <li><span class="flag">Overall spending is steady:</span> every month landed between $2,058 and $2,440 — no runaway months, which makes the subscriptions trend the main thing worth acting on.</li>
+    </ul>
+  </div>
+
+  <footer>Sample output for the AI Beginner's Field Guide · data is fictional · every figure above is computed from the attached spreadsheet</footer>
+</div>
+</body>
+</html>
